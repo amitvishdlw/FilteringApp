@@ -2,6 +2,8 @@ package com.yta.mvvm.presentation.userList
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.yta.mvvm.data.repositoryImpl.MockDb
+import com.yta.mvvm.data.repositoryImpl.UserRepositoryImpl
 import com.yta.mvvm.domain.User
 import com.yta.mvvm.domain.usecases.FilterUsersUseCase
 import com.yta.mvvm.domain.usecases.GetUsersUseCase
@@ -13,10 +15,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class UserListViewModel(
-    private val getUsersUseCase: GetUsersUseCase,
-    private val filterUsersUseCase: FilterUsersUseCase
-) : ViewModel() {
+class UserListViewModel() : ViewModel() {
+    private val getUsersUseCase = GetUsersUseCase(UserRepositoryImpl(MockDb()))
+    private val filterUsersUseCase = FilterUsersUseCase()
+
     private val _state = MutableStateFlow(UserListModel())
     val state = _state.asStateFlow()
 
@@ -58,7 +60,12 @@ class UserListViewModel(
 
             is UserListAction.OnUserSearch -> {
                 viewModelScope.launch {
-                    _state.update { it.copy(isLoading = true) }
+                    _state.update {
+                        it.copy(
+                            isLoading = true,
+                            userQuery = action.userQuery
+                        )
+                    }
 
                     val filteredUsersResource = filterUsersUseCase(
                         usersList = _state.value.allUsers,
@@ -104,3 +111,4 @@ sealed interface UserListEvent {
     data object ErrorOccurredEvent : UserListEvent
     data class OpenUserDetailEvent(val userId: Long) : UserListEvent
 }
+
