@@ -5,7 +5,6 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -29,16 +28,33 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.yta.mvvm.R
+import com.yta.mvvm.data.repositoryImpl.MockDb
+import com.yta.mvvm.data.repositoryImpl.UserRepositoryImpl
+import com.yta.mvvm.domain.usecases.FilterUsersUseCase
+import com.yta.mvvm.domain.usecases.GetUsersUseCase
 import com.yta.mvvm.ui.theme.MVVMTheme
 
 class UserListActivity : ComponentActivity() {
-    private val viewModel: UserListViewModel by viewModels()
+    private lateinit var viewModel: UserListViewModel
+
+    private val getUsersUseCase = GetUsersUseCase(UserRepositoryImpl(MockDb()))
+    private val filterUsersUseCase = FilterUsersUseCase()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+
+
+        viewModel = ViewModelProvider(
+            this,
+            UserListViewModelFactory(getUsersUseCase, filterUsersUseCase)
+        )[UserListViewModel::class.java]
+
+
         setContent {
             MVVMTheme {
                 UserApp(

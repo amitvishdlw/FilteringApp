@@ -1,9 +1,8 @@
 package com.yta.mvvm.presentation.userList
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.yta.mvvm.data.repositoryImpl.MockDb
-import com.yta.mvvm.data.repositoryImpl.UserRepositoryImpl
 import com.yta.mvvm.domain.User
 import com.yta.mvvm.domain.usecases.FilterUsersUseCase
 import com.yta.mvvm.domain.usecases.GetUsersUseCase
@@ -15,10 +14,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class UserListViewModel() : ViewModel() {
-    private val getUsersUseCase = GetUsersUseCase(UserRepositoryImpl(MockDb()))
-    private val filterUsersUseCase = FilterUsersUseCase()
-
+class UserListViewModel(
+    private val getUsersUseCase: GetUsersUseCase,
+    private val filterUsersUseCase: FilterUsersUseCase
+) : ViewModel() {
     private val _state = MutableStateFlow(UserListModel())
     val state = _state.asStateFlow()
 
@@ -92,6 +91,19 @@ class UserListViewModel() : ViewModel() {
                 }
             }
         }
+    }
+}
+
+class UserListViewModelFactory(
+    private val getUsersUseCase: GetUsersUseCase,
+    private val filterUsersUseCase: FilterUsersUseCase
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(UserListViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return UserListViewModel(getUsersUseCase, filterUsersUseCase) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
 
