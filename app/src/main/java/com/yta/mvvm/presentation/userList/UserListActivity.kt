@@ -28,33 +28,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.yta.mvvm.R
-import com.yta.mvvm.data.repositoryImpl.MockDb
-import com.yta.mvvm.data.repositoryImpl.UserRepositoryImpl
-import com.yta.mvvm.domain.usecases.FilterUsersUseCase
-import com.yta.mvvm.domain.usecases.GetUsersUseCase
 import com.yta.mvvm.ui.theme.MVVMTheme
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class UserListActivity : ComponentActivity() {
-    private lateinit var viewModel: UserListViewModel
-
-    private val getUsersUseCase = GetUsersUseCase(UserRepositoryImpl(MockDb()))
-    private val filterUsersUseCase = FilterUsersUseCase()
+    private val viewModel: UserListViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
-
-
-        viewModel = ViewModelProvider(
-            this,
-            UserListViewModelFactory(getUsersUseCase, filterUsersUseCase)
-        )[UserListViewModel::class.java]
-
-
         setContent {
             MVVMTheme {
                 UserApp(

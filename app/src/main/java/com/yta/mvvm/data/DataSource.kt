@@ -1,4 +1,4 @@
-package com.yta.mvvm.data.repositoryImpl
+package com.yta.mvvm.data
 
 import com.yta.mvvm.domain.User
 
