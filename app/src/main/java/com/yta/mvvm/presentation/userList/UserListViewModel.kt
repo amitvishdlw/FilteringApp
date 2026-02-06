@@ -1,7 +1,6 @@
 package com.yta.mvvm.presentation.userList
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.yta.mvvm.domain.User
 import com.yta.mvvm.domain.usecases.FilterUsersUseCase
@@ -91,19 +90,6 @@ class UserListViewModel(
                 }
             }
         }
-    }
-}
-
-class UserListViewModelFactory(
-    private val getUsersUseCase: GetUsersUseCase,
-    private val filterUsersUseCase: FilterUsersUseCase
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(UserListViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return UserListViewModel(getUsersUseCase, filterUsersUseCase) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
 
