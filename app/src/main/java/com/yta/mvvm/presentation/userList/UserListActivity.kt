@@ -116,14 +116,25 @@ class UserListActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxSize(),
                         contentPadding = PaddingValues(horizontal = 8.dp, vertical = 12.dp)
                     ) {
-                        items(uiModel.value.users) { user ->
-                            Text(
-                                text = "${user.firstName} ${user.middleName} ${user.lastName} ${user.age} ${user.rank} ${user.company}",
-                                modifier = Modifier
-                                    .clickable { onAction(UserListAction.OnUserClicked(user.userId)) }
-                                    .fillMaxWidth()
-                                    .padding(8.dp)
-                            )
+                        if (uiModel.value.users.isNotEmpty()) {
+                            items(uiModel.value.users) { user ->
+                                Text(
+                                    text = "${user.firstName} ${user.middleName} ${user.lastName} ${user.age} ${user.rank} ${user.company}",
+                                    modifier = Modifier
+                                        .clickable { onAction(UserListAction.OnUserClicked(user.userId)) }
+                                        .fillMaxWidth()
+                                        .padding(8.dp)
+                                )
+                            }
+                        } else if (uiModel.value.userQuery.isNotEmpty()) {
+                            item {
+                                Text(
+                                    text = "No users found with details = ${uiModel.value.userQuery}",
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(8.dp)
+                                )
+                            }
                         }
                     }
                 }
