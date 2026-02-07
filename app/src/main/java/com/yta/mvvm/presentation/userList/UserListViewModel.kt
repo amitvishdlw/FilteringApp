@@ -68,24 +68,14 @@ class UserListViewModel(
                         )
                     }
 
-                    val filteredUsersResource = filterUsersUseCase(
+                    val filterUsers = filterUsersUseCase(
                         usersList = allUsers, userQuery = action.userQuery
                     )
 
-                    when {
-                        filteredUsersResource.isSuccess -> {
-                            _state.update {
-                                it.copy(
-                                    users = filteredUsersResource.getOrDefault(
-                                        emptyList()
-                                    )
-                                )
-                            }
-                        }
-
-                        filteredUsersResource.isFailure -> {
-                            _event.emit(UserListEvent.ErrorOccurredEvent)
-                        }
+                    _state.update {
+                        it.copy(
+                            users = filterUsers
+                        )
                     }
 
                     _state.update { it.copy(isLoading = false) }
@@ -96,7 +86,9 @@ class UserListViewModel(
 }
 
 data class UserListModel(
-    val users: List<User> = emptyList(), val isLoading: Boolean = false, val userQuery: String = ""
+    val users: List<User> = emptyList(),
+    val isLoading: Boolean = false,
+    val userQuery: String = ""
 )
 
 sealed interface UserListAction {
