@@ -21,8 +21,7 @@ class UserListViewModelTest : BaseKoinTest() {
     @Test
     fun userListViewModel_successfullyLoadedUsers_updatedStateCorrectly() = runTest {
         var currentUiState = userListViewModel.state
-        assertTrue(currentUiState.value.allUsers.isEmpty())
-        assertTrue(currentUiState.value.filteredUsers.isEmpty())
+        assertTrue(currentUiState.value.users.isEmpty())
         assertTrue(currentUiState.value.userQuery.isEmpty())
         assertFalse(currentUiState.value.isLoading)
 
@@ -31,8 +30,7 @@ class UserListViewModelTest : BaseKoinTest() {
 
         currentUiState = userListViewModel.state
 
-        assertTrue(currentUiState.value.allUsers.isNotEmpty())
-        assertTrue(currentUiState.value.filteredUsers.isNotEmpty())
+        assertTrue(currentUiState.value.users.isNotEmpty())
         assertTrue(currentUiState.value.userQuery.isEmpty())
         assertFalse(currentUiState.value.isLoading)
     }

@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
@@ -78,7 +80,10 @@ class UserListActivity : ComponentActivity() {
         onAction: (UserListAction) -> Unit
     ) {
         Surface(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .statusBarsPadding()
+                .safeDrawingPadding()
+                .fillMaxSize()
         ) {
             Column {
                 Text(
@@ -107,7 +112,7 @@ class UserListActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     contentPadding = PaddingValues(horizontal = 8.dp, vertical = 12.dp)
                 ) {
-                    items(uiModel.value.filteredUsers) { user ->
+                    items(uiModel.value.users) { user ->
                         Text(
                             text = "${user.firstName} ${user.middleName} ${user.lastName} ${user.age} ${user.rank} ${user.company}",
                             modifier = Modifier

@@ -19,6 +19,8 @@ class UserListViewModel(
     private val filterUsersUseCase: FilterUsersUseCase,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
+    private var allUsers: List<User> = emptyList()
+
     private val _state = MutableStateFlow(UserListModel())
     val state = _state.asStateFlow()
 
@@ -33,10 +35,10 @@ class UserListViewModel(
 
             when {
                 usersResource.isSuccess -> {
+                    allUsers = usersResource.getOrDefault(emptyList())
                     _state.update {
                         it.copy(
-                            allUsers = usersResource.getOrDefault(emptyList()),
-                            filteredUsers = usersResource.getOrDefault(emptyList())
+                            users = allUsers
                         )
                     }
                 }
@@ -68,7 +70,7 @@ class UserListViewModel(
                     }
 
                     val filteredUsersResource = filterUsersUseCase(
-                        usersList = _state.value.allUsers,
+                        usersList = allUsers,
                         userQuery = action.userQuery
                     )
 
@@ -76,7 +78,7 @@ class UserListViewModel(
                         filteredUsersResource.isSuccess -> {
                             _state.update {
                                 it.copy(
-                                    filteredUsers = filteredUsersResource.getOrDefault(
+                                    users = filteredUsersResource.getOrDefault(
                                         emptyList()
                                     )
                                 )
@@ -96,8 +98,7 @@ class UserListViewModel(
 }
 
 data class UserListModel(
-    val allUsers: List<User> = emptyList(),
-    val filteredUsers: List<User> = emptyList(),
+    val users: List<User> = emptyList(),
     val isLoading: Boolean = false,
     val userQuery: String = ""
 )
