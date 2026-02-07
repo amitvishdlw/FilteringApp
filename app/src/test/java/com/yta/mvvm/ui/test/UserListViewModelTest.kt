@@ -25,7 +25,6 @@ import org.koin.test.mock.declare
 class UserListViewModelTest : BaseKoinTest() {
     override val modules: List<Module> = testModule()
 
-
     @Test
     fun userListViewModel_successfullyLoadedUsers_updatedStateCorrectly() = runTest {
         val userListViewModel: UserListViewModel by inject()
