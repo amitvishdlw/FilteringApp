@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.yta.mvvm.domain.User
 import com.yta.mvvm.domain.usecases.FilterUsersUseCase
 import com.yta.mvvm.domain.usecases.GetUsersUseCase
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +16,8 @@ import kotlinx.coroutines.launch
 
 class UserListViewModel(
     private val getUsersUseCase: GetUsersUseCase,
-    private val filterUsersUseCase: FilterUsersUseCase
+    private val filterUsersUseCase: FilterUsersUseCase,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
     private val _state = MutableStateFlow(UserListModel())
     val state = _state.asStateFlow()
@@ -24,7 +26,7 @@ class UserListViewModel(
     val event = _event.asSharedFlow()
 
     fun loadUsers() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(ioDispatcher) {
             _state.update { it.copy(isLoading = true) }
 
             val usersResource = getUsersUseCase()
