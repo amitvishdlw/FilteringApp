@@ -153,7 +153,7 @@ class UserListViewModelTest : BaseKoinTest() {
         assertFalse(currentUiState.value.isLoading)
         // Assert events has one event
         assertTrue(events.size == 1)
-        // Assert event is ErrorOccuredEvent
+        // Assert event is ErrorOccurredEvent
         assertTrue(events[0] is UserListEvent.ErrorOccurredEvent)
     }
 }
