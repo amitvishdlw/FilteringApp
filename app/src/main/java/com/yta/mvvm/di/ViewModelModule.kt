@@ -1,9 +1,16 @@
 package com.yta.mvvm.di
 
 import com.yta.mvvm.presentation.userList.UserListViewModel
-import org.koin.core.module.dsl.viewModelOf
+import kotlinx.coroutines.Dispatchers
+import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
-    viewModelOf(::UserListViewModel)
+    viewModel {
+        UserListViewModel(
+            get(),
+            get(),
+            Dispatchers.IO
+        )
+    }
 }

@@ -1,7 +1,6 @@
 package com.yta.mvvm.data
 
 import com.yta.mvvm.domain.User
-import kotlinx.coroutines.delay
 
 class MockDb : DataSource {
     private val userList = listOf(
@@ -98,12 +97,10 @@ class MockDb : DataSource {
     )
 
     override suspend fun getAllUsers(): Result<List<User>> {
-        delay(1000)
         return Result.success(userList)
     }
 
     override suspend fun getUser(userId: Long): Result<User> {
-        delay(1000)
         val user = userList.find { it.userId == userId }
             ?: return Result.failure(IllegalStateException())
 

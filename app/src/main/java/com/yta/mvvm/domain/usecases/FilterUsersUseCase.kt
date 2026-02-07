@@ -1,14 +1,12 @@
 package com.yta.mvvm.domain.usecases
 
 import com.yta.mvvm.domain.User
-import kotlinx.coroutines.delay
 
 class FilterUsersUseCase {
     suspend operator fun invoke(
         usersList: List<User>,
         userQuery: String
     ): Result<List<User>> {
-        delay(300)
         val filteredUsers = usersList.filter { user ->
             return@filter user.firstName.contains(userQuery, ignoreCase = true)
                     || user.middleName.contains(userQuery, ignoreCase = true)
