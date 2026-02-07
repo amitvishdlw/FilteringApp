@@ -64,14 +64,12 @@ class UserListViewModel(
                 viewModelScope.launch {
                     _state.update {
                         it.copy(
-                            isLoading = true,
-                            userQuery = action.userQuery
+                            isLoading = true, userQuery = action.userQuery
                         )
                     }
 
                     val filteredUsersResource = filterUsersUseCase(
-                        usersList = allUsers,
-                        userQuery = action.userQuery
+                        usersList = allUsers, userQuery = action.userQuery
                     )
 
                     when {
@@ -98,9 +96,7 @@ class UserListViewModel(
 }
 
 data class UserListModel(
-    val users: List<User> = emptyList(),
-    val isLoading: Boolean = false,
-    val userQuery: String = ""
+    val users: List<User> = emptyList(), val isLoading: Boolean = false, val userQuery: String = ""
 )
 
 sealed interface UserListAction {
